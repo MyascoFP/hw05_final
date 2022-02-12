@@ -1,6 +1,5 @@
 import shutil
 import tempfile
-from urllib import response
 
 from django import forms
 from django.conf import settings
