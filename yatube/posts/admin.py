@@ -17,9 +17,11 @@ class Post(admin.ModelAdmin):
 class Group(admin.ModelAdmin):
     pass
 
+
 @admin.register(Comment)
 class Comment(admin.ModelAdmin):
     pass
+
 
 @admin.register(Follow)
 class Follow(admin.ModelAdmin):

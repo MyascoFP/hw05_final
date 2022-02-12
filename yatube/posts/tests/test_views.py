@@ -33,13 +33,13 @@ class PostPagesTests(TestCase):
             slug='test-slug2',
             description='test description 2'
         )
-        small_gif = (            
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -72,7 +72,7 @@ class PostPagesTests(TestCase):
         self.author_client.force_login(self.author)
 
     def test_pages_uses_correct_template(self):
-        """Проверка использавания верных шаблонов"""
+        """Проверка использавания верных шаблонов."""
         templates_pages_names = {
             reverse('posts:index'): 'posts/index.html',
             reverse('posts:group_list', kwargs={'slug': 'test-slug1'}
@@ -91,7 +91,7 @@ class PostPagesTests(TestCase):
                 self.assertTemplateUsed(response, template)
 
     def test_index_page_show_correct_context(self):
-        """Проверка использования верного context для index"""
+        """Проверка использования верного context для index."""
         response = self.authorized_client.get(reverse('posts:index'))
         first_object = response.context['page_obj'][0]
         post_text = first_object.text
@@ -100,7 +100,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_image, self.post.image)
 
     def test_group_page_show_correct_context(self):
-        """Проверка использования верного context для group list"""
+        """Проверка использования верного context для group list."""
         response = self.authorized_client.get(
             reverse('posts:group_list', kwargs={'slug': 'test-slug1'}))
         first_object = response.context['page_obj'][0]
@@ -112,7 +112,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_image, self.post.image)
 
     def test_profile_page_show_correct_context(self):
-        """Проверка использования верного context для profile"""
+        """Проверка использования верного context для profile."""
         response = self.authorized_client.get(
             reverse(
                 'posts:profile', kwargs={'username': 'NoBody'}
@@ -126,7 +126,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_image, self.post.image)
 
     def test_post_detail_page_show_correct_context(self):
-        """Проверка использования верного context для post detail"""
+        """Проверка использования верного context для post detail."""
         response = self.authorized_client.get(
             reverse(
                 'posts:post_detail', kwargs={'post_id': f'{self.post.pk}'}
@@ -135,7 +135,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(response.context['post'].image, self.post.image)
 
     def test_create_post_page_show_correct_context(self):
-        """Проверка использования верного context для create post"""
+        """Проверка использования верного context для create post."""
         response = self.authorized_client.get(reverse(('posts:post_create')))
         form_fields = {
             'text': forms.fields.CharField,
@@ -148,7 +148,7 @@ class PostPagesTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     def test_edit_post_page_show_correct_context(self):
-        """Проверка использования верного context для post edit"""
+        """Проверка использования верного context для post edit."""
         response = self.authorized_client.get(
             reverse(
                 'posts:post_edit', kwargs={'post_id': f'{self.post.pk}'}
@@ -164,14 +164,14 @@ class PostPagesTests(TestCase):
                 self.assertIsInstance(form_field, expected)
 
     def test_index_post_exist(self):
-        """Проверка, что пост появился на index"""
+        """Проверка, что пост появился на index."""
         response = self.authorized_client.get(reverse('posts:index'))
         first_object = response.context['page_obj'][0]
         post_group = first_object.group
         self.assertEqual(post_group, self.group1)
 
     def test_group1_list_post_exist(self):
-        """Проверка, что пост появился на group list 1"""
+        """Проверка, что пост появился на group list 1."""
         response = self.authorized_client.get(
             reverse(
                 'posts:group_list', kwargs={'slug': 'test-slug1'}
@@ -181,7 +181,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(post_group, self.group1)
 
     def test_group2_list_post_not_exist(self):
-        """Проверка, что пост не появился на group list 2"""
+        """Проверка, что пост не появился на group list 2."""
         response = self.authorized_client.get(
             reverse(
                 'posts:group_list', kwargs={'slug': 'test-slug2'}
@@ -189,13 +189,13 @@ class PostPagesTests(TestCase):
         self.assertEqual(len(response.context['page_obj']), 0)
 
     def test_profile_post_exist(self):
-        """Проверка, что пост появился на profile"""
+        """Проверка, что пост появился на profile."""
         response = self.authorized_client.get(
             reverse('posts:profile', kwargs={'username': 'NoBody'}))
         first_object = response.context['page_obj'][0]
         post_group = first_object.group
         self.assertEqual(post_group, self.group1)
-    
+
     def test_cache_index_page_correct_context(self):
         """Кэш index сформирован с правильным контекстом."""
         response = self.authorized_client.get(reverse('posts:index'))
@@ -212,7 +212,8 @@ class PostPagesTests(TestCase):
         self.assertNotEqual(content, new_new_content)
 
     def test_auth_can_follow(self):
-        """Авторизованный пользователь может подписываться на других пользователей"""
+        """Авторизованный пользователь может подписываться на других
+        пользователей."""
         follow_count = Follow.objects.count()
         response = self.authorized_client.get(reverse(
             'posts:profile_follow', kwargs={'username': 'Author'})
@@ -223,7 +224,7 @@ class PostPagesTests(TestCase):
         self.assertEqual(Follow.objects.count(), follow_count + 1)
 
     def test_auth_can_unfollow(self):
-        """Авторизованный пользователь может отписываться от пользователей"""
+        """Авторизованный пользователь может отписываться от пользователей."""
         Follow.objects.create(
             user=self.user,
             author=self.author
@@ -251,7 +252,6 @@ class PostPagesTests(TestCase):
         ))
         not_follow_context = not_follow_response.context['page_obj']
         self.assertNotEqual(follow_context, not_follow_context)
-        
 
 
 class PaginatorViewsTest(TestCase):
@@ -278,18 +278,18 @@ class PaginatorViewsTest(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_index_first_page_contains_ten_records(self):
-        """Проверка, что на первой странице index 10 постов"""
+        """Проверка, что на первой странице index 10 постов."""
         response = self.authorized_client.get(reverse('posts:index'))
         self.assertEqual(len(response.context['page_obj']), PAGE_CONST)
 
     def test_index_second_page_contains_four_records(self):
-        """Проверка, что на второй странице index 4 постов"""
+        """Проверка, что на второй странице index 4 постов."""
         response = self.authorized_client.get(
             reverse('posts:index') + '?page=2')
         self.assertEqual(len(response.context['page_obj']), 4)
 
     def test_group_list_first_page_contains_ten_records(self):
-        """Проверка, что на первой странице group list 10 постов"""
+        """Проверка, что на первой странице group list 10 постов."""
         response = self.authorized_client.get(
             reverse(
                 'posts:group_list', kwargs={'slug': 'test-slug'}
@@ -297,20 +297,20 @@ class PaginatorViewsTest(TestCase):
         self.assertEqual(len(response.context['page_obj']), PAGE_CONST)
 
     def test_group_list_second_page_contains_four_records(self):
-        """Проверка, что на второй странице group list 4 постов"""
+        """Проверка, что на второй странице group list 4 постов."""
         response = self.authorized_client.get(
             reverse(
                 'posts:group_list', kwargs={'slug': 'test-slug'}) + '?page=2')
         self.assertEqual(len(response.context['page_obj']), 4)
 
     def test_profile_first_page_contains_ten_records(self):
-        """Проверка, что на первой странице profile 10 постов"""
+        """Проверка, что на первой странице profile 10 постов."""
         response = self.authorized_client.get(
             reverse('posts:profile', kwargs={'username': 'NoBody'}))
         self.assertEqual(len(response.context['page_obj']), PAGE_CONST)
 
     def test_profile_second_page_contains_four_records(self):
-        """Проверка, что на первой странице profile 4 постов"""
+        """Проверка, что на первой странице profile 4 постов."""
         response = self.authorized_client.get(
             reverse(
                 'posts:profile', kwargs={'username': 'NoBody'}) + '?page=2')

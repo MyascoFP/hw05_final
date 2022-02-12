@@ -21,13 +21,13 @@ class PostCreateFormTests(TestCase):
             slug='test-slug',
             description='test description',
         )
-        small_gif = (            
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -56,14 +56,14 @@ class PostCreateFormTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_creste_post(self):
-        """Валидная форма создания поста"""
-        small_gif = (            
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+        """Валидная форма создания поста."""
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -95,7 +95,7 @@ class PostCreateFormTests(TestCase):
             ).exists())
 
     def test_post_edit(self):
-        """Валидная форма редактирует запись в Post"""
+        """Валидная форма редактирует запись в Post."""
         form_data = {
             'text': 'Изменённый текст',
         }
@@ -124,7 +124,7 @@ class PostCreateFormTests(TestCase):
             Comment.objects.filter(
                 text='Тестовый комментарий'
             ).exists())
-        
+
         self.assertRedirects(response, reverse(
             'posts:post_detail', kwargs={'post_id': self.post.id})
         )

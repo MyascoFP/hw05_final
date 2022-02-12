@@ -35,10 +35,10 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     if (
-        request.user.is_authenticated and
-        author!=request.user and
-        Follow.objects.filter(author=author, user=request.user).exists()
-        ):
+        request.user.is_authenticated
+        and author != request.user
+        and Follow.objects.filter(author=author, user=request.user).exists()
+    ):
         following = True
     elif author == request.user:
         following = None
@@ -87,7 +87,7 @@ def post_detail(request, post_id):
 @login_required
 def post_create(request):
     groups = Group.objects.all()
-    if request.method == "POST":
+    if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -111,7 +111,7 @@ def post_create(request):
 def post_edit(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     groups = Group.objects.all()
-    if request.method == "POST":
+    if request.method == 'POST':
         form = PostForm(
             request.POST or None,
             files=request.FILES or None,
@@ -133,6 +133,7 @@ def post_edit(request, post_id):
         }
         return render(request, 'posts/create_post.html', context)
 
+
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -143,6 +144,7 @@ def add_comment(request, post_id):
         comment.post = post
         comment.save()
     return redirect('posts:post_detail', post_id=post_id)
+
 
 @login_required
 def follow_index(request):
@@ -157,11 +159,12 @@ def follow_index(request):
     }
     return render(request, 'posts/follow.html', context)
 
+
 @login_required
 def profile_follow(request, username):
     author = get_object_or_404(User, username=username)
-    if (request.user == author or 
-    Follow.objects.filter(user=request.user,author=author,).exists()):
+    if (request.user == author
+            or Follow.objects.filter(user=request.user, author=author,).exists()):
         return redirect('posts:profile', username=username)
     else:
         Follow.objects.create(
@@ -169,6 +172,7 @@ def profile_follow(request, username):
             author=author,
         )
         return redirect('posts:profile', username=username)
+
 
 @login_required
 def profile_unfollow(request, username):

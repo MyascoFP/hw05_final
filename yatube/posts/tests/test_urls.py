@@ -21,13 +21,13 @@ class StaticURLTests(TestCase):
             slug='test-slug',
             description='test description',
         )
-        small_gif = (            
-             b'\x47\x49\x46\x38\x39\x61\x02\x00'
-             b'\x01\x00\x80\x00\x00\x00\x00\x00'
-             b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-             b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-             b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-             b'\x0A\x00\x3B'
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x02\x00'
+            b'\x01\x00\x80\x00\x00\x00\x00\x00'
+            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
+            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
+            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
+            b'\x0A\x00\x3B'
         )
         uploaded = SimpleUploadedFile(
             name='small.gif',
@@ -52,52 +52,53 @@ class StaticURLTests(TestCase):
         self.authorized_client.force_login(self.user)
 
     def test_homepage(self):
-        """Верное использование шаблона index"""
+        """Верное использование шаблона index."""
         response = self.guest_client.get('/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_author(self):
-        """Верное использование шаблона author"""
+        """Верное использование шаблона author."""
         response = self.guest_client.get('/about/author/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_tech(self):
-        """Верное использование шаблона tech"""
+        """Верное использование шаблона tech."""
         response = self.guest_client.get('/about/tech/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_group_page(self):
-        """Верное использование шаблона group_list"""
+        """Верное использование шаблона group_list."""
         response = self.guest_client.get(f'/group/{self.group.slug}/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_profile(self):
-        """Верное использование шаблона profile"""
+        """Верное использование шаблона profile."""
         response = self.guest_client.get(f'/profile/{self.user.username}/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_detail(self):
-        """Верное использование шаблона post_detail"""
+        """Верное использование шаблона post_detail."""
         response = self.guest_client.get(f'/posts/{self.post.pk}/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_post_edit(self):
-        """Верное использование шаблона post_edit"""
+        """Верное использование шаблона post_edit."""
         response = self.authorized_client.get(f'/posts/{self.post.pk}/edit/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_create(self):
-        """Верное использование шаблона post_create"""
+        """Верное использование шаблона post_create."""
         response = self.authorized_client.get('/create/')
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
     def test_comment(self):
-        """Комментировать посты может только авторизованный пользователь"""
-        response = self.authorized_client.get(f'/posts/{self.post.pk}/comment/')
+        """Комментировать посты может только авторизованный пользователь."""
+        response = self.authorized_client.get(
+            f'/posts/{self.post.pk}/comment/')
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
 
     def test_unexisted_page(self):
-        """Отсутствие шаблона для несуществующей страницы"""
+        """Отсутствие шаблона для несуществующей страницы."""
         response = self.guest_client.get('/unexisted_page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
