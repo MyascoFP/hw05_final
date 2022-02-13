@@ -1,12 +1,12 @@
 import shutil
 import tempfile
 from http import HTTPStatus
-from xml.etree.ElementTree import PI
 
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from posts.models import Group, Post, User
+
 from yatube.settings import PICTURE
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
