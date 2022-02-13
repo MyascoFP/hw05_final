@@ -9,7 +9,7 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from posts.models import Comment, Follow, Group, Post, User
 
-from yatube.settings import PAGE_CONST
+from yatube.settings import PAGE_CONST, PICTURE
 
 TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
@@ -32,14 +32,7 @@ class PostPagesTests(TestCase):
             slug='test-slug2',
             description='test description 2'
         )
-        small_gif = (
-            b'\x47\x49\x46\x38\x39\x61\x02\x00'
-            b'\x01\x00\x80\x00\x00\x00\x00\x00'
-            b'\xFF\xFF\xFF\x21\xF9\x04\x00\x00'
-            b'\x00\x00\x00\x2C\x00\x00\x00\x00'
-            b'\x02\x00\x01\x00\x00\x02\x02\x0C'
-            b'\x0A\x00\x3B'
-        )
+        small_gif = PICTURE
         uploaded = SimpleUploadedFile(
             name='small.gif',
             content=small_gif,
@@ -238,6 +231,8 @@ class PostPagesTests(TestCase):
         self.assertEqual(Follow.objects.count(), follow_count - 1)
 
     def test_new_follow_post_show_correct(self):
+        """Новая запись пользователя появляется в ленте тех, 
+        кто на него подписан и не появляется в ленте тех, кто не подписан."""
         Follow.objects.create(
             user=self.user,
             author=self.author

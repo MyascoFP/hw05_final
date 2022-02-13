@@ -1,3 +1,4 @@
+from django.db.models import Q, F
 from core.models import CreatedModel
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -85,6 +86,10 @@ class Follow(models.Model):
     )
 
     class Meta:
+        constraints = [
+            models.CheckConstraint(check=~Q(user=F('author')), name='no_self_follow'),
+            models.UniqueConstraint(fields=['user'], name='unique_follow')
+        ]
         verbose_name = 'Follow'
         verbose_name_plural = 'Follows'
         pass

@@ -1,13 +1,14 @@
 from django.test import TestCase
 
-from ..models import Group, Post, User
+from ..models import Group, Post, Comment, Follow, User
 
 
 class PostModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.user = User.objects.create_user(username='auth')
+        cls.user = User.objects.create_user(username='Nobody')
+        cls.author = User.objects.create_user(username='Author')
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='Тестовый слаг',
@@ -17,13 +18,48 @@ class PostModelTest(TestCase):
             author=cls.user,
             text='Тестовая группа',
         )
+        cls.comment = Comment.objects.create(
+            post=cls.post,
+            author=cls.user,
+            text='Тестовый комментарий',
+        )
 
     def test_models_have_correct_object_names(self):
         """Проверяем, что у моделей корректно работает __str__."""
-        post = PostModelTest.post
+        post = self.post
         expected_post = post.text[:15]
         self.assertEqual(expected_post, str(post))
 
-        group = PostModelTest.group
+        group = self.group
         expected_group = group.title
         self.assertEqual(expected_group, str(group))
+
+        comment = self.comment
+        expected_comment = comment.text[:15]
+        self.assertEqual(expected_comment, str(comment))
+
+    def test_models_have_correct_help_text(self):
+        post = self.post
+        help_text = post._meta.get_field('text').help_text
+        self.assertEqual(help_text, 'Текст нового поста')
+
+        comment = self.comment
+        help_text = comment._meta.get_field('text').help_text
+        self.assertEqual(help_text, 'Текст нового комментария')
+
+    def test_cannot_follow_yourself(self):
+        """Пользователь не может пописаться на себя"""
+        Follow.objects.create(
+            user = self.user,
+            author = self.user,
+        )
+        self.assertEqual(Follow.objects.count(), 0)
+
+    def test_follow_is_unique(self):
+        """Каждая подписка должна быть уникальна"""
+        for i in range(2):
+            Follow.objects.create(
+                user = self.user,
+                author = self.author,
+            )
+        self.assertEqual(Follow.objects.count(), 1)
