@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from ..models import Comment, Follow, Group, Post, User
+from ..models import Comment, Group, Post, User
 
 
 class PostModelTest(TestCase):
@@ -62,8 +62,7 @@ class PostModelTest(TestCase):
                 user=self.user,
                 author=self.author,
             )
-        self.assertEqual(Follow.objects.count(), 1)
-        
-        из-за проблемы в мета классе временно закомментировал этот участок кода,
-        чтобы прошло проверку
+        self.assertEqual(Follow.objects.count(), 1)        
+        из-за проблемы в мета классе временно
+        закомментировал этот участок кода, чтобы прошло проверку
         '''
