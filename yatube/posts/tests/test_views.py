@@ -231,8 +231,8 @@ class PostPagesTests(TestCase):
         self.assertEqual(Follow.objects.count(), follow_count - 1)
 
     def test_new_follow_post_show_correct(self):
-        """Новая запись пользователя появляется в ленте тех, 
-        кто на него подписан и не появляется в ленте тех, кто не подписан."""
+        """Новая запись пользователя появляется в ленте тех, кто на него
+        подписан и не появляется в ленте тех, кто не подписан."""
         Follow.objects.create(
             user=self.user,
             author=self.author

@@ -48,18 +48,18 @@ class PostModelTest(TestCase):
         self.assertEqual(help_text, 'Текст нового комментария')
 
     def test_cannot_follow_yourself(self):
-        """Пользователь не может пописаться на себя"""
+        """Пользователь не может пописаться на себя."""
         Follow.objects.create(
-            user = self.user,
-            author = self.user,
+            user=self.user,
+            author=self.user,
         )
         self.assertEqual(Follow.objects.count(), 0)
 
     def test_follow_is_unique(self):
-        """Каждая подписка должна быть уникальна"""
+        """Каждая подписка должна быть уникальна."""
         for i in range(2):
             Follow.objects.create(
-                user = self.user,
-                author = self.author,
+                user=self.user,
+                author=self.author,
             )
         self.assertEqual(Follow.objects.count(), 1)
