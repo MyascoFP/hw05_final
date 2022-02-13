@@ -62,7 +62,7 @@ class PostModelTest(TestCase):
                 user=self.user,
                 author=self.author,
             )
-        self.assertEqual(Follow.objects.count(), 1)        
+        self.assertEqual(Follow.objects.count(), 1)
         из-за проблемы в мета классе временно
         закомментировал этот участок кода, чтобы прошло проверку
         '''
