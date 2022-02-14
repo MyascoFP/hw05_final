@@ -76,8 +76,12 @@ class Comment(CreatedModel):
 class Follow(models.Model):
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'author'], name='unique_follow'),
-            models.CheckConstraint(check=~Q(author=F('user')), name='no_self_follow')
+            models.UniqueConstraint(
+                fields=['user', 'author'], name='unique_follow'
+            ),
+            models.CheckConstraint(
+                check=~Q(author=F('user')), name='no_self_follow'
+            )
         ]
         verbose_name = 'Follow'
         verbose_name_plural = 'Follows'
