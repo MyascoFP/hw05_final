@@ -1,6 +1,7 @@
+from django.db import IntegrityError
 from django.test import TestCase
 
-from ..models import Comment, Group, Post, User
+from ..models import Comment, Follow, Group, Post, User
 
 
 class PostModelTest(TestCase):
@@ -46,23 +47,22 @@ class PostModelTest(TestCase):
         comment = self.comment
         help_text = comment._meta.get_field('text').help_text
         self.assertEqual(help_text, 'Текст нового комментария')
-    '''
+
     def test_cannot_follow_yourself(self):
         """Пользователь не может пописаться на себя."""
-        Follow.objects.create(
-            user=self.user,
-            author=self.user,
-        )
-        self.assertEqual(Follow.objects.count(), 0)
+        with self.assertRaises(IntegrityError) as context:
+            Follow.objects.create(
+                user=self.user,
+                author=self.user,
+            )
+        self.assertTrue('CHECK constraint failed' in str(context.exception))
 
     def test_follow_is_unique(self):
         """Каждая подписка должна быть уникальна."""
-        for i in range(2):
-            Follow.objects.create(
-                user=self.user,
-                author=self.author,
-            )
-        self.assertEqual(Follow.objects.count(), 1)
-        из-за проблемы в мета классе временно
-        закомментировал этот участок кода, чтобы прошло проверку
-        '''
+        with self.assertRaises(IntegrityError) as context:
+            for i in range(2):
+                Follow.objects.create(
+                    user=self.user,
+                    author=self.author,
+                )
+        self.assertTrue('UNIQUE constraint failed' in str(context.exception))

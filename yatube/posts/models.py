@@ -74,6 +74,15 @@ class Comment(CreatedModel):
 
 
 class Follow(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'], name='unique_follow'),
+            models.CheckConstraint(check=~Q(author=F('user')), name='no_self_follow')
+        ]
+        verbose_name = 'Follow'
+        verbose_name_plural = 'Follows'
+        pass
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -84,13 +93,3 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following',
     )
-
-    class Meta:
-        constraints = [
-            models.CheckConstraint(check=~Q(user=F('author')),
-                                   name='no_self_follow'),
-            models.UniqueConstraint(fields=['user'], name='unique_follow')
-        ]
-        verbose_name = 'Follow'
-        verbose_name_plural = 'Follows'
-        pass
